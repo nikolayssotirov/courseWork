@@ -39,7 +39,7 @@ def validateLogin():
  
  
  
-        # connect to mysql
+        # connect to mysql.
  
         con = mysql.connect()
         cursor = con.cursor()
