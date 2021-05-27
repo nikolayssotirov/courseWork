@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, json, sessions
+from flask import Flask, render_template, request, json, session, redirect
 from flaskext.mysql import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import redirect
+#from werkzeug.utils import redirect
 
 app = Flask(__name__)
 mysql = MySQL()
 
-mysql = MySQL()
+app.secret_key = 'why would I tell you my secret key?'
  
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
@@ -26,44 +26,6 @@ def showSignUp():
 @app.route('/showSignIn')
 def showSignin():
     return render_template('signin.html')
-
-@app.route('/userHome')
-def userHome():
-    return render_template('userHome.html')
-
-@app.route('/validateLogin',methods=['POST'])
-def validateLogin():
-    try:
-        _username = request.form['inputEmail']
-        _password = request.form['inputPassword']
- 
- 
- 
-        # connect to mysql.
- 
-        con = mysql.connect()
-        cursor = con.cursor()
-        cursor.callproc('sp_validateLogin',(_username,))
-        data = cursor.fetchall()
- 
- 
- 
- 
-        if len(data) > 0:
-            if check_password_hash(str(data[0][3]),_password):
-                sessions['user'] = data[0][0]
-                return redirect('/userHome')
-            else:
-                return render_template('error.html',error = 'Wrong Email address or Password.')
-        else:
-            return render_template('error.html',error = 'Wrong Email address or Password.')
- 
- 
-    except Exception as e:
-        return render_template('error.html',error = str(e))
-    finally:
-        cursor.close()
-        con.close()
 
 @app.route('/signUp',methods=['POST'])
 def signUp():
@@ -96,6 +58,49 @@ def signUp():
     finally:
         cursor.close() 
         conn.close()
+
+@app.route('/validateLogin',methods=['POST'])
+def validateLogin():
+    try:
+        _username = request.form['inputEmail']
+        _password = request.form['inputPassword']
+ 
+ 
+ 
+        # connect to mysql.
+ 
+        con = mysql.connect()
+        cursor = con.cursor()
+        cursor.callproc('sp_validateLogin',(_username,))
+        data = cursor.fetchall()
+        
+        if len(data) > 0:
+            print(str(data[0][3]))
+            print(_password)
+            print(check_password_hash(str(data[0][3]), _password))
+            if check_password_hash(str(data[0][3]), _password):
+                print('ab')
+                session['root'] = data[0][0]
+                return redirect('/userHome')
+            else:
+                return render_template('error.html',error = 'Wrong Email address or Password.')
+        else:
+            return render_template('error.html',error = 'Wrong Email address or Password.')
+ 
+ 
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+    finally:
+        cursor.close()
+        con.close()
+
+@app.route('/userHome')
+def userHome():
+    if session.get('root'):
+        return render_template('userHome.html')
+    else:
+        return render_template('error.html',error = 'Unauthorized Access')
+
 
 if __name__ == "__main__":
     app.run()
