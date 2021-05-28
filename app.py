@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, json, session, redirect
 from flaskext.mysql import MySQL
-from werkzeug.security import generate_password_hash, check_password_hash
+#import bcrypt
+#from werkzeug.security import generate_password_hash, check_password_hash
 #from werkzeug.utils import redirect
 
 app = Flask(__name__)
@@ -41,8 +42,8 @@ def signUp():
             
             conn = mysql.connect()
             cursor = conn.cursor()
-            _hashed_password = generate_password_hash(_password)
-            cursor.callproc('sp_createUser',(_name,_email,_hashed_password))
+            #_hashed_password = bcrypt.hashpw(_password, bcrypt.gensalt())
+            cursor.callproc('sp_createUser',(_name,_email,_password))
             data = cursor.fetchall()
 
             if len(data) == 0:
@@ -77,16 +78,16 @@ def validateLogin():
         if len(data) > 0:
             print(str(data[0][3]))
             print(_password)
-            print(check_password_hash(str(data[0][3]), _password))
-            if check_password_hash(str(data[0][3]), _password):
+            #print(bcrypt.checkpw(_password, str(data[0][3])))
+
+            if (_password == str(data[0][3])):
                 print('ab')
-                session['root'] = data[0][0]
+                session['user'] = data[0][0]
                 return redirect('/userHome')
             else:
                 return render_template('error.html',error = 'Wrong Email address or Password.')
         else:
             return render_template('error.html',error = 'Wrong Email address or Password.')
- 
  
     except Exception as e:
         return render_template('error.html',error = str(e))
@@ -96,12 +97,15 @@ def validateLogin():
 
 @app.route('/userHome')
 def userHome():
-    if session.get('root'):
+    if session.get('user'):
         return render_template('userHome.html')
     else:
         return render_template('error.html',error = 'Unauthorized Access')
 
+@app.route('/logout')
+def logout():
+    session.pop('user',None)
+    return redirect('/')
 
 if __name__ == "__main__":
     app.run()
-	
