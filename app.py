@@ -1,3 +1,4 @@
+import re
 from flask import Flask, render_template, request, json, session, redirect
 from flaskext.mysql import MySQL
 #import bcrypt
@@ -60,6 +61,13 @@ def signUp():
         cursor.close() 
         conn.close()
 
+@app.route('/userHome')
+def userHome():
+    if session.get('user'):
+        return render_template('userHome.html')
+    else:
+        return render_template('error.html',error = 'Забранен достъп!')
+
 @app.route('/validateLogin',methods=['POST'])
 def validateLogin():
     try:
@@ -76,18 +84,13 @@ def validateLogin():
         data = cursor.fetchall()
         
         if len(data) > 0:
-            print(str(data[0][3]))
-            print(_password)
-            #print(bcrypt.checkpw(_password, str(data[0][3])))
-
             if (_password == str(data[0][3])):
-                print('ab')
                 session['user'] = data[0][0]
                 return redirect('/userHome')
             else:
-                return render_template('error.html',error = 'Wrong Email address or Password.')
+                return render_template('error.html',error = 'Грешен имейл или парола.')
         else:
-            return render_template('error.html',error = 'Wrong Email address or Password.')
+            return render_template('error.html',error = 'Грешен имейл или парола.')
  
     except Exception as e:
         return render_template('error.html',error = str(e))
@@ -95,17 +98,50 @@ def validateLogin():
         cursor.close()
         con.close()
 
-@app.route('/userHome')
-def userHome():
-    if session.get('user'):
-        return render_template('userHome.html')
-    else:
-        return render_template('error.html',error = 'Unauthorized Access')
-
 @app.route('/logout')
 def logout():
     session.pop('user',None)
     return redirect('/')
+
+@app.route('/question1')
+def question1():
+    return render_template('question1.html')
+
+@app.route('/question2')
+def question2():
+    return render_template('question2.html')
+
+@app.route('/question3')
+def question3():
+    return render_template('question3.html')
+
+@app.route('/question4')
+def question4():
+    return render_template('question4.html')
+
+@app.route('/question5')
+def question5():
+    return render_template('question5.html')
+
+@app.route('/question6')
+def question6():
+    return render_template('question6.html')
+
+@app.route('/question7')
+def question7():
+    return render_template('question7.html')
+
+@app.route('/question8')
+def question8():
+    return render_template('question8.html')
+
+@app.route('/question9')
+def question9():
+    return render_template('question9.html')
+
+@app.route('/question10')
+def question10():
+    return render_template('question10.html')    
 
 if __name__ == "__main__":
     app.run()
