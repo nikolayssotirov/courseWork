@@ -1,9 +1,6 @@
 <html>
     
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <title>Star rating using pure CSS</title>
 
   <link href="../static/addWish.css" rel="stylesheet">
 
@@ -25,11 +22,19 @@
     <div class="jumbotron">
         <h1>Как бихте оценили ТУ</h1>
         <p class="lead"></p>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question3'">1</button>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question3'">2</button>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question3'">3</button>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question3'">4</button>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question3'">5</button>
+        <form action="/addRating" method="post">
+        <input class="form-signin" type="radio" name="rating" id="2" value=1></input><br>    
+        <label for="2">Слабо</label><br>
+        <input class="form-signin" type="radio" name="rating" id="2" value=2></input><br>    
+        <label for="2">Приемливо</label><br>
+        <input class="form-signin" type="radio" name="rating" id="2" value=3></input><br>    
+        <label for="2">Задоволително</label><br>
+        <input class="form-signin" type="radio" name="rating" id="2" value=4></input><br>    
+        <label for="2">Много добро</label><br>
+        <input class="form-signin" type="radio" name="rating" id="2" value=5></input><br>    
+        <label for="2">Отлично</label><br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Напред</button>
+        </form>
     </div>
 </body>
 

@@ -107,6 +107,32 @@ def logout():
 def question1():
     return render_template('question1.html')
 
+@app.route('/addRating',methods=['POST'])
+def addRating1():
+    try:
+        if session.get('user'):
+            _user = session.get('user')
+            _rating = int(request.form['rating'])
+
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.callproc('sp_addQuestion1',(_user,_rating))
+            data = cursor.fetchall()
+ 
+            if len(data) == 0:
+                conn.commit()
+                return redirect('/question2')
+            else:
+                return render_template('error.html',error = 'An error occurred!')
+ 
+        else:
+            return render_template('error.html',error = 'Unauthorized Access')
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+    finally:
+        cursor.close()
+        conn.close()
+
 @app.route('/question2')
 def question2():
     return render_template('question2.html')
