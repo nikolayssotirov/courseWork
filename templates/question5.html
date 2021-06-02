@@ -1,9 +1,6 @@
 <html>
     
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <title>Star rating using pure CSS</title>
 
   <link href="../static/addWish.css" rel="stylesheet">
 
@@ -23,13 +20,23 @@
         </nav>
     </div>
     <div class="jumbotron">
-        <h1>Как бихте оценили ТУ</h1>
+        <h1>Колко полезни ви се струват практическите упражнения?</h1>
         <p class="lead"></p>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question6'">1</button>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question6'">2</button>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question6'">3</button>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question6'">4</button>
-        <button button id="btnSignUp" class="btn btn-lg btn-primary btn-block" OnClick="location.href='question6'">5</button>
+        <form action="/addRating5" method="post">
+            <input class="form-signin" type="radio" name="rating" id="10" value=0></input><br> 
+            <label for="10">Не мога да преценя</label><br>
+            <input class="form-signin" type="radio" name="rating" id="11" value=1></input><br>    
+            <label for="11">Незадоволително</label><br>
+            <input class="form-signin" type="radio" name="rating" id="12" value=2></input><br>    
+            <label for="12">Приемливо</label><br>
+            <input class="form-signin" type="radio" name="rating" id="13" value=3></input><br>    
+            <label for="13">Задоволително</label><br>
+            <input class="form-signin" type="radio" name="rating" id="14" value=4></input><br>    
+            <label for="14">Много добро</label><br>
+            <input class="form-signin" type="radio" name="rating" id="15" value=5></input><br>    
+            <label for="15">Перфектно</label><br>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Напред</button>
+        </form>
     </div>
 </body>
 
