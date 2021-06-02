@@ -408,9 +408,9 @@ def addRating10():
  
             if len(data) == 0:
                 if _rating == 0:
-                    return redirect('/')
+                    return redirect("/")
                 conn.commit()
-                return redirect('/')
+                return redirect("/")
             else:
                 return render_template('error.html',error = 'An error occurred!')
  
