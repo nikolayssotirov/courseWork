@@ -18,6 +18,10 @@ mysql.init_app(app)
 @app.route('/')
 def main():
     return render_template('index.html')
+
+@app.route('/indexLogged')
+def indexLogged():
+    return render_template('indexLogged.html')
  
 @app.route('/showSignUp')
 def showSignUp():
@@ -408,9 +412,9 @@ def addRating10():
  
             if len(data) == 0:
                 if _rating == 0:
-                    return redirect("/")
+                    return redirect("/indexLogged")
                 conn.commit()
-                return redirect("/")
+                return redirect("/indexLogged")
             else:
                 return render_template('error.html',error = 'An error occurred!')
  
@@ -422,37 +426,37 @@ def addRating10():
         cursor.close()
         conn.close()
 
-@app.route('/getRatings')
-def getRatings():
-    try:
-        if session.get('user'):
+# @app.route('/getRatings')
+# def getRatings():
+#     try:
+#         if session.get('user'):
 
-            con = mysql.connect()
-            cursor = con.cursor()
-            cursor.callproc('sp_getRatings')
-            ratings = cursor.fetchall()
+#             con = mysql.connect()
+#             cursor = con.cursor()
+#             cursor.callproc('sp_getRatings')
+#             ratings = cursor.fetchall()
  
-            ratings_dict = []
-            for rating in ratings:
-                rating_dict = {
-                        'Въпрос 1': rating[0],
-                        'Въпрос 2': rating[1],
-                        'Въпрос 3': rating[2],
-                        'Въпрос 4': rating[3],
-                        'Въпрос 5': rating[4],
-                        'Въпрос 6': rating[5],
-                        'Въпрос 7': rating[6],
-                        'Въпрос 8': rating[7],
-                        'Въпрос 9': rating[8],
-                        'Въпрос 10': rating[9],
-                        'Средно': rating[10]}
-                ratings_dict.append(rating_dict)
+#             ratings_dict = []
+#             for rating in ratings:
+#                 rating_dict = {
+#                         'Въпрос 1': rating[0],
+#                         'Въпрос 2': rating[1],
+#                         'Въпрос 3': rating[2],
+#                         'Въпрос 4': rating[3],
+#                         'Въпрос 5': rating[4],
+#                         'Въпрос 6': rating[5],
+#                         'Въпрос 7': rating[6],
+#                         'Въпрос 8': rating[7],
+#                         'Въпрос 9': rating[8],
+#                         'Въпрос 10': rating[9],
+#                         'Средно': rating[10]}
+#                 ratings_dict.append(rating_dict)
  
-            return json.dumps(ratings_dict)
-        else:
-            return render_template('error.html', error = 'Unauthorized Access')
-    except Exception as e:
-        return render_template('error.html', error = str(e))
+#             return json.dumps(ratings_dict)
+#         else:
+#             return render_template('error.html', error = 'Unauthorized Access')
+#     except Exception as e:
+#         return render_template('error.html', error = str(e))
 
 if __name__ == "__main__":
     app.run()
